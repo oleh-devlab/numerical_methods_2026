@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 from tabulate_data import BASE_DIR, read_data, read_data_from_txt
 
@@ -52,6 +53,53 @@ class NewtonInterpolator:
 
 		return np.array(x_vals), np.array(y_vals)
 
+class FactorialInterpolator:
+    def __init__(self, x, y, verbose=False):
+        self.x_data = x
+        self.y_data = y
+        self.n = len(y)
+        self.verbose = verbose
+        # Обчислюємо крок (припускаючи, що вузли рівновіддалені)
+        self.h = x[1] - x[0]
+        self.diffs = self._forward_differences()
+
+    def _forward_differences(self):
+        # Матриця для звичайних скінченних різниць
+        diffs = np.zeros((self.n, self.n))
+        diffs[:, 0] = self.y_data
+        
+        for j in range(1, self.n):
+            for i in range(self.n - j):
+                # Формула скінченної різниці: f(x_{i+1}) - f(x_i)
+                diffs[i, j] = diffs[i+1, j-1] - diffs[i, j-1]
+        
+        if self.verbose:
+            print("\nСкінченні різниці (верхній рядок для факторіального многочлена):")
+            for j in range(1, self.n):
+                print(f"Порядок {j}: {diffs[0, j]:.4f}")
+                
+        return diffs[0, :] # Для формули потрібен лише верхній рядок
+
+    def falling_factorial(self, t, k):
+        # Обчислення спадного факторіала t^(k) = t(t-1)...(t-k+1)
+        if k == 0:
+            return 1.0
+        result = 1.0
+        for i in range(k):
+            result *= (t - i)
+        return result
+
+    def predict(self, x_val):
+        # Перехід до нової змінної t
+        t = (x_val - self.x_data[0]) / self.h
+        p = 0.0
+        
+        # Формула: Сума ( Delta^k f(0) / k! ) * t^(k)
+        for k in range(self.n):
+            term = (self.diffs[k] / math.factorial(k)) * self.falling_factorial(t, k)
+            p += term
+        return p
+
 x, y = read_data("data.csv")
 x = np.array(x)
 y = np.array(y)
@@ -90,17 +138,39 @@ error = abs(cpu_5 - cpu_4)
 # Обчислення омега для 5 вузлів у точці 600
 omega_val = model_5.omega_function(target_rps)
 
+print("\n--- Факторіальний многочлен (на рівновіддалених вузлах) ---")
+
+# Факторіальний многочлен (на рівновіддалених вузлах)
+x_eq = np.linspace(x.min(), x.max(), 5)
+y_eq = np.array([model_5.newton_polynomial(xi) for xi in x_eq])
+
+model_fact = FactorialInterpolator(x_eq, y_eq, verbose=True)
+cpu_fact = model_fact.predict(target_rps)
+print("-" * 30)
+
 # Тестуємо у проміжку
 x_vals_5, y_vals_5 = model_5.get_graph_vals()
 x_vals_4, y_vals_4 = model_4.get_graph_vals()
 
+# Точки для факторіального многочлена
+y_vals_fact = np.array([model_fact.predict(xi) for xi in x_vals_5])
+
 error_v2 = np.abs(y_vals_5 - y_vals_4)
+
+x_eq = np.linspace(x.min(), x.max(), 5)
+y_eq = np.array([model_5.newton_polynomial(xi) for xi in x_eq])
 
 # Побудова графіка
 plt.plot(x, y, 'ro', label="Вузли")
 plt.plot(x_vals_5, y_vals_5, 'b-', label="Многочлен Ньютона (усі вузли)")
 plt.plot(x_vals_4, y_vals_4, 'g--', label="4 вузли")
+
+plt.plot(x_vals_5, y_vals_fact, 'c:', linewidth=3, label="Факторіальний многочлен")
+# Додаємо хрестики ('mx'), щоб показати 5 штучних рівновіддалених вузлів
+plt.plot(x_eq, y_eq, 'mx', markersize=8, label="Рівновіддалені вузли")
+
 plt.plot([target_rps, target_rps],[cpu_4, cpu_5], 'yo', label="Прогнозовані вузли")
+plt.plot([target_rps, target_rps],[cpu_4, cpu_fact], 'mo', label="Прогноз факторіальним многочленом")
 plt.xlabel("RPS")
 plt.ylabel("CPU (%)")
 plt.title("Інтерполяція завантаження CPU")
@@ -108,9 +178,10 @@ plt.legend()
 plt.grid()
 plt.show()
 
-print(f"Прогнозоване завантаження CPU при {target_rps} RPS:")
+print(f"Прогнозоване завантаження CPU при {target_rps} RPS (метод Ньютона):")
 print(f" - 4 вузли: {cpu_4:.2f}%")
 print(f" - 5 вузлів: {cpu_5:.2f}%")
+print(f" - Факторіальним многочленом (5 рівновіддалених вузлів): {cpu_fact:.2f}%")
 print(f"Різниця прогнозів (оцінка стабільності): {error:.2f}%")
 print("-" * 30)
 print(f"Значення функції вузлів w(x) у точці {target_rps}: {omega_val}")
