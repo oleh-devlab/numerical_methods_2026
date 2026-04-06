@@ -1,4 +1,5 @@
 import math
+import matplotlib.pyplot as plt
 
 def moisture(t):
     return 50.0 * math.exp(-0.1 * t) + 5.0 * math.sin(t)
@@ -32,6 +33,9 @@ def aitken_order(d_h, d_2h, d_4h):
     return math.log(ratio, 2.0)
 
 def find_optimal_h(t0, exact):
+    errors = []
+    k_values = []
+
     best_k = -3
     best_h = 10.0 ** (-best_k)
     best_value = central_difference(moisture, t0, best_h)
@@ -49,8 +53,11 @@ def find_optimal_h(t0, exact):
             best_value = approx
             best_error = error
             best_k = k
+        
+        errors.append(error)
+        k_values.append(k)
 
-    return best_h, best_value, best_error, best_k
+    return best_h, best_value, best_error, best_k, errors, k_values
 
 
 t0 = 1
@@ -65,10 +72,22 @@ print("\n--- 1) Точне значення похідної ---")
 print(f"M'(t0) = {exact:.12f}")
 
 print("\n--- 2) Оптимальний крок ---")
-h_opt, d_opt, err_opt, k_opt = find_optimal_h(t0, exact)
+h_opt, d_opt, err_opt, k_opt, errors, k_values = find_optimal_h(t0, exact)
 print(f"Оптимальний крок: h_opt = 10^({-k_opt}) = {h_opt}")
 print(f"Похідна D(h_opt) = {d_opt:.12f}")
 print(f"Похибка: {err_opt:.12e}")
+
+plt.figure(figsize=(10, 6))
+plt.plot(k_values, errors, marker='o', linestyle='-', color='b')
+
+plt.yscale('log')
+plt.xlabel('Показник степеня k (де крок h = 10^{-k})')
+plt.ylabel('Абсолютна похибка R (логарифмічна шкала)')
+plt.title('Залежність похибки чисельного диференціювання від кроку h')
+plt.grid(True, which="both", linestyle='--', linewidth=0.5)
+plt.xticks(range(-3, 21, 2))
+
+plt.show()
 
 print("\n--- 3-6) Розрахунки для h, 2h та метод Рунге-Ромберга ---")
 d_h = central_difference(moisture, t0, h)
