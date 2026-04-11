@@ -10,6 +10,7 @@ Almost every lab assignment focuses on applying mathematical methods to real or 
 - `lab2/` - using Newton's interpolation to approximate CPU load based on limited data
 - `lab3/` - least-squares approximation for forecasting the average monthly temperature
 - `lab4/` - numerical differentiation of a moisture model using finite differences with Runge-Romberg and Aitken refinements; step-size optimization and error analysis
+- `lab5/` - numerical integration using Simpson’s method and its refinements by Runge-Römbberg, Eitken and an adaptive algorithm
 
 ## Requirements
 
@@ -28,6 +29,7 @@ python3 .\lab1\main.py
 python3 .\lab2\main.py
 python3 .\lab3\main.py
 python3 .\lab4\main.py
+python3 .\lab5\main.py
 ```
 
 ## Notes
