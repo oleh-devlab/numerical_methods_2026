@@ -48,3 +48,4 @@ pytestdebug.log
 .env
 .flaskenv
 *.secret
+Test/
