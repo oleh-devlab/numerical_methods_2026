@@ -1,7 +1,12 @@
-from RW_matrix import read_matrix, read_vector, save_lu, generate_system
+import matplotlib.pyplot as plt
 import os
 
+from RW_matrix import read_matrix, read_vector, save_lu, generate_system, BASE_DIR
+
 n = 100
+
+history_dX = []
+history_R = []
 
 def lu_decomposition(A):
     n = len(A)
@@ -49,8 +54,9 @@ def multiply_matrix_vector(A, X):
 def vector_norm(V):
     return max(abs(v) for v in V)
 
-def refinement(X0, A, B, L, U, eps_0):
+def refinement(X0, A, B, L, U, eps_0, initial_eps):
     iterations = 0
+    history_R = [initial_eps]
     X_current = X0[:]
 
     while True:
@@ -68,6 +74,9 @@ def refinement(X0, A, B, L, U, eps_0):
         norm_dX = vector_norm(dX)
         norm_R = vector_norm(R)
 
+        history_dX.append(norm_dX)
+        history_R.append(norm_R)
+
         if norm_dX <= eps_0 and norm_R <= eps_0:
             break
             
@@ -78,7 +87,7 @@ def refinement(X0, A, B, L, U, eps_0):
     return iterations, norm_dX, norm_R, X_current
 
 def main():
-    if not os.path.exists("matrix_A.txt") or not os.path.exists("vector_B.txt"):
+    if not os.path.exists(f"{BASE_DIR}/matrix_A.txt") or not os.path.exists(f"{BASE_DIR}/vector_B.txt"):
         generate_system(n)
 
     A = read_matrix("matrix_A.txt")
@@ -99,13 +108,31 @@ def main():
     # 5. Ітераційне уточнення розв'язку
     eps_0 = 1e-14
 
-    iterations, norm_dX, norm_R, X_current = refinement(X0, A, B, L, U, eps_0)
+    iterations, norm_dX, norm_R, X_current = refinement(X0, A, B, L, U, eps_0, eps)
 
     print(f"Уточнений розв'язок знайдено за {iterations} ітерацій.")
     print(f"Кінцева похибка: ||dX|| = {norm_dX}, ||R|| = {norm_R}")
     print("Перші 5 елементів уточненого розв'язку:")
     for i in range(5):
         print(f"x[{i}] = {X_current[i]}")
+
+    iterations = range(len(history_R))
+    
+    plt.figure(figsize=(8, 5))
+    plt.plot(iterations, history_R, marker='o', linestyle='-', color='b', label='Норма нев\'язки ||R||')
+    
+    if history_dX:
+        plt.plot(range(1, len(history_dX) + 1), history_dX, marker='s', linestyle='--', color='r', label='Норма похибки ||dX||')
+
+    plt.yscale('log')
+    plt.title('Графік збіжності ітераційного уточнення розв\'язку')
+    plt.xlabel('Номер ітерації')
+    plt.ylabel('Похибка (логарифмічна шкала)')
+    plt.grid(True, which="both", ls="--", alpha=0.7)
+    plt.legend()
+    
+    plt.savefig(f'{BASE_DIR}/convergence_plot.png', dpi=300, bbox_inches='tight')
+    plt.show()
 
 if __name__ == '__main__':
     main()

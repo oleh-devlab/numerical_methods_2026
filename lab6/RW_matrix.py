@@ -1,22 +1,11 @@
 import numpy as np
 import os
-import random
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def generate_system(n=100, x_val=2.5):
     A = np.random.uniform(1.0, 10.0, (n, n))
     np.fill_diagonal(A, A.diagonal() + 100.0)
-
-    # A = []
-    # for i in range(n):
-    #     row = []
-    #     for j in range(n):
-    #         val = random.uniform(1.0, 10.0)
-    #         if i == j:
-    #             val += 100.0
-    #         row.append(val)
-    #     A.append(row)
 
     # Обчислення вектора B
     B = []
