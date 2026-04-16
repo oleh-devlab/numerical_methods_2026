@@ -12,6 +12,7 @@ Almost every lab assignment focuses on applying mathematical methods to real or 
 - `lab4/` - numerical differentiation of a moisture model using finite differences with Runge-Romberg and Aitken refinements; step-size optimization and error analysis
 - `lab5/` - numerical integration using Simpson’s method and its refinements by Runge-Römbberg, Eitken and an adaptive algorithm
 - `lab6/` - solving linear systems using LU decomposition and Gaussian elimination
+- `lab7/` - solving linear systems using iterative methods: simple iteration, Jacobi, and Gauss-Seidel
 
 ## Requirements
 
