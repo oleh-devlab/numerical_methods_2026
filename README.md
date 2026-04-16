@@ -11,6 +11,7 @@ Almost every lab assignment focuses on applying mathematical methods to real or 
 - `lab3/` - least-squares approximation for forecasting the average monthly temperature
 - `lab4/` - numerical differentiation of a moisture model using finite differences with Runge-Romberg and Aitken refinements; step-size optimization and error analysis
 - `lab5/` - numerical integration using Simpson’s method and its refinements by Runge-Römbberg, Eitken and an adaptive algorithm
+- `lab6/` - solving linear systems using LU decomposition and Gaussian elimination
 
 ## Requirements
 
@@ -18,19 +19,6 @@ Almost every lab assignment focuses on applying mathematical methods to real or 
     - numpy
     - matplotlib
     - requests
-
-## Quick start
-
-Run a lab:
-
-```
-python3 .\lab0\main.py
-python3 .\lab1\main.py
-python3 .\lab2\main.py
-python3 .\lab3\main.py
-python3 .\lab4\main.py
-python3 .\lab5\main.py
-```
 
 ## Notes
 
