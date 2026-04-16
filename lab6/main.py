@@ -5,9 +5,6 @@ from RW_matrix import read_matrix, read_vector, save_lu, generate_system, BASE_D
 
 n = 100
 
-history_dX = []
-history_R = []
-
 def lu_decomposition(A):
     n = len(A)
     L = [[0.0] * n for _ in range(n)]
@@ -56,7 +53,10 @@ def vector_norm(V):
 
 def refinement(X0, A, B, L, U, eps_0, initial_eps):
     iterations = 0
+    
+    history_dX = []
     history_R = [initial_eps]
+
     X_current = X0[:]
 
     while True:
@@ -84,7 +84,7 @@ def refinement(X0, A, B, L, U, eps_0, initial_eps):
             print("Перервано: досягнуто ліміт ітерацій.")
             break
 
-    return iterations, norm_dX, norm_R, X_current
+    return iterations, norm_dX, norm_R, X_current, history_dX, history_R
 
 def main():
     if not os.path.exists(f"{BASE_DIR}/matrix_A.txt") or not os.path.exists(f"{BASE_DIR}/vector_B.txt"):
@@ -108,7 +108,7 @@ def main():
     # 5. Ітераційне уточнення розв'язку
     eps_0 = 1e-14
 
-    iterations, norm_dX, norm_R, X_current = refinement(X0, A, B, L, U, eps_0, eps)
+    iterations, norm_dX, norm_R, X_current, history_dX, history_R = refinement(X0, A, B, L, U, eps_0, eps)
 
     print(f"Уточнений розв'язок знайдено за {iterations} ітерацій.")
     print(f"Кінцева похибка: ||dX|| = {norm_dX}, ||R|| = {norm_R}")
