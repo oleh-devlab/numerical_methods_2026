@@ -43,7 +43,7 @@ def simple_iteration(A, B, eps_0):
 
         if norm_dX < eps_0:
             break
-        if iterations > 5000:
+        if iterations > 2500:
             print("Перевищено ліміт ітерацій у методі простої ітерації")
             break
 
@@ -70,7 +70,7 @@ def jacobi(A, B, eps_0):
 
         if norm_dX < eps_0:
             break
-        if iterations > 5000:
+        if iterations > 2500:
             print("Перевищено ліміт ітерацій у методі Якобі")
             break
 
@@ -100,7 +100,7 @@ def seidel(A, B, eps_0):
 
         if norm_dX < eps_0:
             break
-        if iterations > 5000:
+        if iterations > 2500:
             print("Перевищено ліміт ітерацій у методі Зейделя")
             break
 
@@ -118,11 +118,11 @@ def main():
     print(f"{eps_0=}\n")
 
     # 1. Метод простої ітерації
-    iter_simp, X_simp, hist_simp = simple_iteration(A, B, eps_0)
+    iter_simp, _, hist_simp = simple_iteration(A, B, eps_0)
     print(f"Метод простої ітерації завершено за {iter_simp} ітерацій.")
 
     # 2. Метод Якобі
-    iter_jac, X_jac, hist_jac = jacobi(A, B, eps_0)
+    iter_jac, _, hist_jac = jacobi(A, B, eps_0)
     print(f"Метод Якобі завершено за {iter_jac} ітерацій.")
 
     # 3. Метод Зейделя
@@ -146,8 +146,8 @@ def main():
     plt.grid(True, which="both", ls="--", alpha=0.5)
     plt.legend()
     
-    plt.savefig(f'{BASE_DIR}/convergence_comparison_lab8.png', dpi=300, bbox_inches='tight')
-    print("\nГрафік збіжності збережено як 'convergence_comparison_lab8.png'")
+    plt.savefig(f'{BASE_DIR}/convergence_comparison_lab7.png', dpi=300, bbox_inches='tight')
+    print("\nГрафік збіжності збережено як 'convergence_comparison_lab7.png'")
     plt.show()
 
 if __name__ == '__main__':
