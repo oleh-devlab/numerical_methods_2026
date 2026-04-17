@@ -5,7 +5,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def generate_system(n=100, x_val=2.5):
     A = np.random.uniform(1.0, 10.0, (n, n))
-    np.fill_diagonal(A, A.diagonal() + 100.0)
+    row_sums = np.sum(np.abs(A), axis=1)
+    off_diag_sums = row_sums - np.abs(A.diagonal())
+    new_diagonal = 1.5*off_diag_sums + np.random.uniform(1.0, 10.0, n)
+    np.fill_diagonal(A, new_diagonal)
 
     # Обчислення вектора B
     B = []

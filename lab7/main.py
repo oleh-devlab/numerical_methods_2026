@@ -43,7 +43,7 @@ def simple_iteration(A, B, eps_0):
 
         if norm_dX < eps_0:
             break
-        if iterations > 5000:
+        if iterations > 2500:
             print("Перевищено ліміт ітерацій у методі простої ітерації")
             break
 
@@ -70,7 +70,7 @@ def jacobi(A, B, eps_0):
 
         if norm_dX < eps_0:
             break
-        if iterations > 5000:
+        if iterations > 2500:
             print("Перевищено ліміт ітерацій у методі Якобі")
             break
 
@@ -100,7 +100,7 @@ def seidel(A, B, eps_0):
 
         if norm_dX < eps_0:
             break
-        if iterations > 5000:
+        if iterations > 2500:
             print("Перевищено ліміт ітерацій у методі Зейделя")
             break
 
