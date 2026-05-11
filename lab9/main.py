@@ -1,8 +1,37 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 
 import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def plot_rosenbrock_trajectory(trajectory):
+    x1 = np.linspace(-1.5, 1.5, 400)
+    x2 = np.linspace(-0.5, 1.5, 400)
+    X1, X2 = np.meshgrid(x1, x2)
+    
+    Z = 100 * (X1**2 - X2)**2 + (X1 - 1)**2
+
+    plt.figure(figsize=(10, 8))
+    
+    levels = np.logspace(-1, 3, 20)
+    contour = plt.contour(X1, X2, Z, levels=levels, cmap='viridis', alpha=0.7)
+    plt.colorbar(contour, label='Значення функції Розенброка (лог. шкала)')
+
+    traj_x = [point[0] for point in trajectory]
+    traj_y = [point[1] for point in trajectory]
+
+    plt.plot(traj_x, traj_y, marker='o', color='red', markersize=4, linestyle='-', linewidth=2, label='Траєкторія Хука-Дживса')
+    
+    plt.plot(traj_x[0], traj_y[0], 'go', markersize=8, label='Старт')
+    plt.plot(1.0, 1.0, 'b*', markersize=12, label='Справжній мінімум (1, 1)')
+
+    plt.title("Траєкторія пошуку мінімуму функції Розенброка")
+    plt.xlabel('x_1')
+    plt.ylabel('x_2')
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.5)
+    plt.show()
 
 def plot_system():
     x1 = np.linspace(-3, 3, 400)
@@ -149,6 +178,7 @@ def main():
     write_trajectory_to_file(trajectory, "hooke_jeeves_trajectory.txt")
     print("Координати точок траєкторії збережено у 'hooke_jeeves_trajectory.txt'")
 
+    plot_rosenbrock_trajectory(traj_ros)
     plot_system()
 
 if __name__ == '__main__':
