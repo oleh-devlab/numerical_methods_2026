@@ -13,6 +13,8 @@ Almost every lab assignment focuses on applying mathematical methods to real or 
 - `lab5/` - numerical integration using Simpson’s method and its refinements by Runge-Römbberg, Eitken and an adaptive algorithm
 - `lab6/` - solving linear systems using LU decomposition and Gaussian elimination
 - `lab7/` - solving linear systems using iterative methods: simple iteration, Jacobi, and Gauss-Seidel
+- `lab8/` - several numerical methods for solving nonlinear equations with a single unknown, in particular those with complex roots
+- `lab9/` - solving a system of nonlinear equations using the Hooke–Jeeves zero-order method
 
 ## Requirements
 
