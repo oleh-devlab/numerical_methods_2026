@@ -15,6 +15,7 @@ Almost every lab assignment focuses on applying mathematical methods to real or 
 - `lab7/` - solving linear systems using iterative methods: simple iteration, Jacobi, and Gauss-Seidel
 - `lab8/` - several numerical methods for solving nonlinear equations with a single unknown, in particular those with complex roots
 - `lab9/` - solving a system of nonlinear equations using the Hooke–Jeeves zero-order method
+- `lab10/` - solving ordinary differential equations using the Runge-Kutta method and the Adams-Bashforth-Moulton method, with error analysis and adaptive step size control
 
 ## Requirements
 
